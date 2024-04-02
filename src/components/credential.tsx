@@ -7,14 +7,22 @@ import {
 } from "react-native";
 
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+
 import { colors } from "@/styles/colors";
+
+import { QRCode } from "@/components/qrcode";
 
 type CredentialProps = {
   image?: string;
   onChangeAvatar?: () => void;
+  onExpandQRCode?: () => void;
 };
 
-export function Credential({ image, onChangeAvatar }: CredentialProps) {
+export function Credential({
+  image,
+  onChangeAvatar,
+  onExpandQRCode,
+}: CredentialProps) {
   return (
     <View className="w-full self-start items-center">
       <Image
@@ -61,12 +69,9 @@ export function Credential({ image, onChangeAvatar }: CredentialProps) {
           pedrokarnoski@gmail.com
         </Text>
 
-        <Image
-          source={require("@/assets/ticket/qrcode.png")}
-          className="w-32 h-32"
-        />
+        <QRCode value="teste" size={120} />
 
-        <TouchableOpacity activeOpacity={0.7}>
+        <TouchableOpacity activeOpacity={0.7} onPress={onExpandQRCode}>
           <Text className="font-body text-orange-500 text-sm mt-6">
             Ampliar QRCode
           </Text>

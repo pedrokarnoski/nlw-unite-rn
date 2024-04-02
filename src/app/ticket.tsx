@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Alert,
+  Modal,
 } from "react-native";
 
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -17,9 +18,11 @@ import { colors } from "@/styles/colors";
 import { Credential } from "@/components/credential";
 import { Header } from "@/components/header";
 import { Button } from "@/components/button";
+import { QRCode } from "@/components/qrcode";
 
 export default function Ticket() {
   const [image, setImage] = useState("");
+  const [expandQRCode, setExpandQRCode] = useState(false);
 
   async function handleSelectImage() {
     try {
@@ -50,7 +53,11 @@ export default function Ticket() {
         contentContainerClassName="px-8 pb-8"
         showsVerticalScrollIndicator={false}
       >
-        <Credential image={image} onChangeAvatar={handleSelectImage} />
+        <Credential
+          image={image}
+          onChangeAvatar={handleSelectImage}
+          onExpandQRCode={() => setExpandQRCode(true)}
+        />
 
         <MaterialCommunityIcons
           name="chevron-double-down"
@@ -75,6 +82,20 @@ export default function Ticket() {
           </Text>
         </TouchableOpacity>
       </ScrollView>
+
+      <Modal visible={expandQRCode} statusBarTranslucent animationType="slide">
+        <View className="flex-1 bg-green-500 items-center justify-center">
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => setExpandQRCode(false)}
+          >
+            <QRCode value="teste" size={300} />
+            <Text className="text-body text-orange-500 text-sm text-center mt-10">
+              Fechar QRCode
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </View>
   );
 }
