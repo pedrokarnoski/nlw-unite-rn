@@ -13,6 +13,10 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import * as ImagePicker from "expo-image-picker";
 
+import { useBadgeStore } from "@/store/badge-store";
+
+import { Redirect } from "expo-router";
+
 import { colors } from "@/styles/colors";
 
 import { Credential } from "@/components/credential";
@@ -21,8 +25,9 @@ import { Button } from "@/components/button";
 import { QRCode } from "@/components/qrcode";
 
 export default function Ticket() {
-  const [image, setImage] = useState("");
   const [expandQRCode, setExpandQRCode] = useState(false);
+
+  const badgeStore = useBadgeStore();
 
   async function handleSelectImage() {
     try {
@@ -34,12 +39,16 @@ export default function Ticket() {
       });
 
       if (result.assets) {
-        setImage(result.assets[0].uri);
+        badgeStore.updateAvatar(result.assets[0].uri);
       }
     } catch (error) {
       console.log(error);
       Alert.alert("Foto", "Não foi possível selecionar a imagem.");
     }
+  }
+
+  if (!badgeStore.data?.checkInURL) {
+    return <Redirect href="/" />;
   }
 
   return (
@@ -54,7 +63,7 @@ export default function Ticket() {
         showsVerticalScrollIndicator={false}
       >
         <Credential
-          image={image}
+          data={badgeStore.data}
           onChangeAvatar={handleSelectImage}
           onExpandQRCode={() => setExpandQRCode(true)}
         />
@@ -71,12 +80,16 @@ export default function Ticket() {
         </Text>
 
         <Text className="text-white font-regular text-base mb-6">
-          Mostre ao mundo que você vai participar do Unite Summit!
+          Mostre ao mundo que você vai participar do evento{" "}
+          {badgeStore.data.eventTitle}!
         </Text>
 
         <Button title="Compartilhar" />
 
-        <TouchableOpacity activeOpacity={0.7}>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          onPress={() => badgeStore.remove()}
+        >
           <Text className="text-base text-white font-bold text-center mt-10">
             Remover ingresso
           </Text>

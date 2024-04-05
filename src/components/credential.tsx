@@ -12,14 +12,16 @@ import { colors } from "@/styles/colors";
 
 import { QRCode } from "@/components/qrcode";
 
+import { BadgeStoreProps } from "@/store/badge-store";
+
 type CredentialProps = {
-  image?: string;
+  data: BadgeStoreProps;
   onChangeAvatar?: () => void;
   onExpandQRCode?: () => void;
 };
 
 export function Credential({
-  image,
+  data,
   onChangeAvatar,
   onExpandQRCode,
 }: CredentialProps) {
@@ -36,17 +38,19 @@ export function Credential({
           className="px-6 py-8 h-40 items-center self-stretch border-b border-white/10 overflow-hidden"
         >
           <View className="w-full flex-row items-center justify-between">
-            <Text className="text-zinc-50 text-sm font-bold">Unite Summit</Text>
-            <Text className="text-zinc-50 text-sm font-bold">#123</Text>
+            <Text className="text-zinc-50 text-sm font-bold">
+              {data.eventTitle}
+            </Text>
+            <Text className="text-zinc-50 text-sm font-bold">#{data.id}</Text>
           </View>
 
           <View className="h-40 w-40 bg-zinc-950 rounded-full" />
         </ImageBackground>
 
-        {image ? (
+        {data.image ? (
           <TouchableOpacity onPress={onChangeAvatar}>
             <Image
-              source={{ uri: image }}
+              source={{ uri: data.image }}
               className="w-36 h-36 rounded-full -mt-24"
             />
           </TouchableOpacity>
@@ -63,13 +67,13 @@ export function Credential({
         )}
 
         <Text className="font-bold text-2xl text-zinc-50 mt-4">
-          Pedro Karnoski
+          {data.name}
         </Text>
         <Text className="font-regular text-base text-zinc-300 mb-4">
-          pedrokarnoski@gmail.com
+          {data.email}
         </Text>
 
-        <QRCode value="teste" size={120} />
+        <QRCode value={data.checkInURL} size={120} />
 
         <TouchableOpacity activeOpacity={0.7} onPress={onExpandQRCode}>
           <Text className="font-body text-orange-500 text-sm mt-6">
