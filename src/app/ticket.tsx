@@ -18,6 +18,8 @@ import { useBadgeStore } from "@/store/badge-store";
 
 import { Redirect } from "expo-router";
 
+import { MotiView } from "moti";
+
 import { colors } from "@/styles/colors";
 
 import { Credential } from "@/components/credential";
@@ -83,12 +85,22 @@ export default function Ticket() {
           onExpandQRCode={() => setExpandQRCode(true)}
         />
 
-        <MaterialCommunityIcons
-          name="chevron-double-down"
-          color={colors.gray[300]}
-          size={24}
-          className="self-center my-6"
-        />
+        <MotiView
+          from={{ translateY: 0 }}
+          animate={{ translateY: 10 }}
+          transition={{
+            loop: true,
+            type: "timing",
+            duration: 700,
+          }}
+        >
+          <MaterialCommunityIcons
+            name="chevron-double-down"
+            color={colors.gray[300]}
+            size={24}
+            className="self-center my-6"
+          />
+        </MotiView>
 
         <Text className="text-white font-bold text-2xl mt-4">
           Compartilhar credencial
