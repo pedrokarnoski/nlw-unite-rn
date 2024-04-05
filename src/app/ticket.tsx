@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Alert,
   Modal,
+  Share,
 } from "react-native";
 
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -28,6 +29,20 @@ export default function Ticket() {
   const [expandQRCode, setExpandQRCode] = useState(false);
 
   const badgeStore = useBadgeStore();
+
+  async function handleShare() {
+    try {
+      if (badgeStore.data?.checkInURL) {
+        await Share.share({
+          message: badgeStore.data.checkInURL,
+        });
+      }
+    } catch (err) {
+      console.log(err);
+
+      Alert.alert("Compartilhar", "Não foi possível compartilhar.");
+    }
+  }
 
   async function handleSelectImage() {
     try {
@@ -84,7 +99,7 @@ export default function Ticket() {
           {badgeStore.data.eventTitle}!
         </Text>
 
-        <Button title="Compartilhar" />
+        <Button title="Compartilhar" onPress={handleShare} />
 
         <TouchableOpacity
           activeOpacity={0.7}
